@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.project.system.datcconfig.mapper.HlTianchengConfigMapper">
+    
+    <resultMap type="HlTianchengConfig" id="HlTianchengConfigResult">
+        <result property="configId"    column="config_id"    />
+        <result property="configMonth"    column="config_month"    />
+        <result property="primaryStart"    column="primary_start"    />
+        <result property="primaryEnd"    column="primary_end"    />
+        <result property="middleStart"    column="middle_start"    />
+        <result property="middleEnd"    column="middle_end"    />
+        <result property="highStart"    column="high_start"    />
+        <result property="highEnd"    column="high_end"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateDate"    column="update_date"    />
+        <result property="remarks"    column="remarks"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectHlTianchengConfigVo">
+        select config_id, config_month, primary_start, primary_end, middle_start, middle_end, high_start, high_end, create_by, create_time, update_by, update_date, remarks, status from hl_tiancheng_config
+    </sql>
+
+    <select id="selectHlTianchengConfigList" parameterType="HlTianchengConfig" resultMap="HlTianchengConfigResult">
+        <include refid="selectHlTianchengConfigVo"/>
+        <where>  
+            <if test="configMonth != null  and configMonth != ''"> and config_month = #{configMonth}</if>
+            <if test="updateDate != null "> and update_date = #{updateDate}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+        order by config_id  desc
+    </select>
+    
+    <select id="selectHlTianchengConfigById" parameterType="Long" resultMap="HlTianchengConfigResult">
+        <include refid="selectHlTianchengConfigVo"/>
+        where config_id = #{configId}
+    </select>
+        
+    <insert id="insertHlTianchengConfig" parameterType="HlTianchengConfig" useGeneratedKeys="true" keyProperty="configId">
+        insert into hl_tiancheng_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="configMonth != null  and configMonth != ''">config_month,</if>
+            <if test="primaryStart != null ">primary_start,</if>
+            <if test="primaryEnd != null ">primary_end,</if>
+            <if test="middleStart != null ">middle_start,</if>
+            <if test="middleEnd != null ">middle_end,</if>
+            <if test="highStart != null ">high_start,</if>
+            <if test="highEnd != null ">high_end,</if>
+            <if test="createBy != null ">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null ">update_by,</if>
+            <if test="updateDate != null ">update_date,</if>
+            <if test="remarks != null  and remarks != ''">remarks,</if>
+            <if test="status != null  and status != ''">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="configMonth != null  and configMonth != ''">#{configMonth},</if>
+            <if test="primaryStart != null ">#{primaryStart},</if>
+            <if test="primaryEnd != null ">#{primaryEnd},</if>
+            <if test="middleStart != null ">#{middleStart},</if>
+            <if test="middleEnd != null ">#{middleEnd},</if>
+            <if test="highStart != null ">#{highStart},</if>
+            <if test="highEnd != null ">#{highEnd},</if>
+            <if test="createBy != null ">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null ">#{updateBy},</if>
+            <if test="updateDate != null ">#{updateDate},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHlTianchengConfig" parameterType="HlTianchengConfig">
+        update hl_tiancheng_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="configMonth != null  and configMonth != ''">config_month = #{configMonth},</if>
+            <if test="primaryStart != null ">primary_start = #{primaryStart},</if>
+            <if test="primaryEnd != null ">primary_end = #{primaryEnd},</if>
+            <if test="middleStart != null ">middle_start = #{middleStart},</if>
+            <if test="middleEnd != null ">middle_end = #{middleEnd},</if>
+            <if test="highStart != null ">high_start = #{highStart},</if>
+            <if test="highEnd != null ">high_end = #{highEnd},</if>
+            <if test="createBy != null ">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null ">update_by = #{updateBy},</if>
+            <if test="updateDate != null ">update_date = #{updateDate},</if>
+            <if test="remarks != null  and remarks != ''">remarks = #{remarks},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+        </trim>
+        where config_id = #{configId}
+    </update>
+
+    <delete id="deleteHlTianchengConfigById" parameterType="Long">
+        delete from hl_tiancheng_config where config_id = #{configId}
+    </delete>
+
+    <delete id="deleteHlTianchengConfigByIds" parameterType="String">
+        delete from hl_tiancheng_config where config_id in 
+        <foreach item="configId" collection="array" open="(" separator="," close=")">
+            #{configId}
+        </foreach>
+    </delete>
+       <select id="selectOne"  resultMap="HlTianchengConfigResult">
+        <include refid="selectHlTianchengConfigVo"/>
+     where status=0 order by config_id  desc limit 1
+    </select>
+    
+    
+</mapper>

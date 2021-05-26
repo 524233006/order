@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.project.hn.classes.mapper.HnClassesMapper">
+    
+    <resultMap type="HnClasses" id="HnClassesResult">
+        <result property="id"    column="id"    />
+        <result property="schoolId"    column="school_id"    />
+        <result property="gradeId"    column="grade_id"    />
+        <result property="classCode"    column="class_code"    />
+        <result property="className"    column="class_name"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+         <association property="school"    column="school_id" javaType="HnSchool" resultMap="hnSchoolResult" />
+    </resultMap>
+	<resultMap id="hnSchoolResult" type="HnSchool">
+		<id     property="id"   column="school_id"     />
+		<result property="schoolName" column="school_name"   />
+	</resultMap>
+    <sql id="selectHnClassesVo">
+        select id, school_id, grade_id, class_code, class_name, status, create_by, create_time, update_by, update_time from hn_classes
+    </sql>
+
+    <select id="selectHnClassesList" parameterType="HnClasses" resultMap="HnClassesResult">
+         select c.id, c.school_id, c.grade_id, c.class_code, c.class_name, c.status,  c.create_time, s.school_name from hn_classes c
+         left join hn_school s on s.id =c.school_id
+        <where>  
+            <if test="schoolId != null "> and c.school_id = #{schoolId}</if>
+            <if test="gradeId != null "> and c.grade_id = #{gradeId}</if>
+            <if test="classCode != null  and classCode != ''"> and c.class_code = #{classCode}</if>
+            <if test="className != null  and className != ''"> and c.class_name like concat('%', #{className}, '%')</if>
+            <if test="status != null  and status != ''"> and c.status = #{status}</if>
+        </where>
+        order by c.id desc
+    </select>
+    
+    <select id="selectHnClassesById" parameterType="Long" resultMap="HnClassesResult">
+        select c.id, c.school_id, c.grade_id, c.class_code, c.class_name, c.status,  c.create_time, s.school_name from hn_classes c
+         left join hn_school s on s.id =c.school_id
+        where c.id = #{id}
+    </select>
+       
+      <select id="selectHnClassesByClassNameAndSchoolId"  resultMap="HnClassesResult">
+        select c.id, c.school_id, c.grade_id, c.class_code, c.class_name, c.status,  c.create_time, s.school_name from hn_classes c
+         left join hn_school s on s.id =c.school_id
+        where c.class_name = #{className}  and c.school_id=#{schoolId}
+    </select> 
+    <insert id="insertHnClasses" parameterType="HnClasses" useGeneratedKeys="true" keyProperty="id">
+        insert into hn_classes
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="schoolId != null ">school_id,</if>
+            <if test="gradeId != null ">grade_id,</if>
+            <if test="classCode != null  and classCode != ''">class_code,</if>
+            <if test="className != null  and className != ''">class_name,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="schoolId != null ">#{schoolId},</if>
+            <if test="gradeId != null ">#{gradeId},</if>
+            <if test="classCode != null  and classCode != ''">#{classCode},</if>
+            <if test="className != null  and className != ''">#{className},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHnClasses" parameterType="HnClasses">
+        update hn_classes
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="schoolId != null ">school_id = #{schoolId},</if>
+            <if test="gradeId != null ">grade_id = #{gradeId},</if>
+            <if test="classCode != null  and classCode != ''">class_code = #{classCode},</if>
+            <if test="className != null  and className != ''">class_name = #{className},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHnClassesById" parameterType="Long">
+        delete from hn_classes where id = #{id}
+    </delete>
+
+    <delete id="deleteHnClassesByIds" parameterType="String">
+        delete from hn_classes where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

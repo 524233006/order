@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>渠道分析</title>
+<script type="text/javascript" src="js/echarts.js"></script>
+<script type="text/javascript" src="js/jquery-2.1.4.js"></script>
+</head>
+<body>
+    <!--  为 ECharts 准备一个具备大小（宽高）的 DOM 饼形图 -->
+    <div id="main" style="width: 600px; height: 400px;"></div>
+    <script type="text/javascript">
+        var myChart = echarts.init(document.getElementById('main'));
+        myChart.setOption({
+            title : {
+                text : '充值渠道分析',
+                x : 'center'
+            },
+            tooltip : {
+                trigger : 'item',
+                formatter : "{a} <br />{b} : {c} ({d}%)"
+            },
+            legend : {
+                orient : 'vertical',
+                x : 'left',
+                data : []
+            },
+            toolbox: { 
+                show : true, 
+                feature : { 
+                    mark : {show: true}, 
+                    dataView : {show: true, readOnly: false}, 
+                    magicType : { 
+                        show: true,  
+                        type: ['pie', 'funnel'], 
+                        option: { 
+                            funnel: { 
+                                x: '25%', 
+                                width: '50%', 
+                                funnelAlign: 'left', 
+                                max: 1548 
+                            } 
+                        } 
+                    }, 
+                    restore : {show: true}, 
+                    saveAsImage : {show: true} 
+                } 
+            },
+            series : [ {
+                name : '',
+                type : 'pie',
+                radius : '55%',
+                center : [ '50%', '60%' ],
+                data : []
+            } ]
+        });
+        myChart.showLoading(); //数据加载完之前先显示一段简单的loading动画
+        var names = []; //类别数组
+        var nums = []; //数量数组
+        var array = [];
+        $.ajax({
+            type : "post",
+            url : "/api/payment/showEChartsData",
+            data : {},
+            cache : false, //禁用缓存 
+            dataType : "json",
+            success : function(result) {
+                //请求成功时执行该函数内容，result即为服务器返回的json对象
+                if (result) {
+                    for (var i = 0; i < result.length; i++) {
+                        names.push(result[i].channelName); //挨个取出类别并填入类别数组
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        nums.push(result[i].num); //挨个取出销量并填入销量数组
+                    }
+                    for (var i = 0; i < result.length; i++) {
+                        var map ={};
+                        map.name = result[i].channelName;
+                        map.value = result[i].num;
+                        array[i]=map;
+                    }
+                    myChart.hideLoading(); //隐藏加载动画
+                    myChart.setOption({ //加载数据图表 
+                        legend : {
+                            data : names
+                        },
+                        series : {
+                            // 根据名字对应到相应的系列 
+                            name : ['数量'],
+                            data : array
+                        }
+                    });
+                }
+            },
+            error : function(errorMsg) {
+                //请求失败时执行该函数
+                alert("图表请求数据失败!");
+                myChart.hideLoading();
+            }
+        });
+    </script>
+</body>
+</html>

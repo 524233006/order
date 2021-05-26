@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Web前端开发</title>
+    <!-- <link href="https://cdn.bootcss.com/font-awesome/5.10.2/css/fontawesome.min.css" rel="stylesheet"> -->
+    <link rel="stylesheet" href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://cdn.bootcss.com/animate.css/3.7.2/animate.min.css">
+   <!--  <link rel="stylesheet" href="style.css"> -->
+    <style>
+* {
+   box-sizing: border-box;
+}
+
+body {
+    background: #92bde7;
+    color: #485e74;
+    line-height: 1.6;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.container {
+    max-width: 1170px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 1em;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+.brand {
+    text-align: center;
+}
+
+.brand span {
+    color: #fff;
+}
+
+.wrapper {
+    box-shadow: 0 0 20px 0 rgba(72, 94, 116, 0.7);
+}
+
+.wrapper>* {
+    padding: 1em;
+}
+
+.company-info {
+    background: #c9e6ff;
+}
+
+.company-info h3,
+.company-info ul {
+    text-align: center;
+    margin: 0 0 1rem 0;
+}
+
+
+/* form */
+
+.contact {
+    background: #f9feff;
+}
+
+.contact form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 20px;
+}
+
+.contact form label {
+    display: block;
+}
+
+.contact form p {
+    margin: 0;
+}
+
+.contact form button,
+.contact form input,
+.contact form textarea {
+    width: 100%;
+    padding: 1em;
+    border: 1px solid #c9e6ff;
+}
+
+.contact form button {
+    background: #c9e6ff;
+    border: 0;
+}
+
+.contact form button:hover,
+.contact form button:focus {
+    background: #92bde7;
+    color: #fff;
+    outline: 0;
+    transition: background-color 2s ease-out;
+}
+
+.contact form .full {
+    grid-column: 1/3;
+}
+
+.alert {
+    text-align: center;
+    padding: 10px;
+    margin-bottom: 10px;
+    color: #fff;
+    background: #79c879;
+    display: none;
+}
+
+
+/* 大屏幕尺寸下的样式 */
+
+@media(min-width:700px) {
+    .wrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+    }
+    .wrapper>* {
+        padding: 2em;
+    }
+    .company-info h3,
+    .company-info ul,
+    .brand {
+        text-align: left;
+    }
+}
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1 class="brand"><span>Web</span>前端开发技术交流博客</h1>
+        <div class="wrapper animated bounceInLeft">
+            <div class="company-info">
+                <h3>Web前端开发技术交流博客</h3>
+                <ul>
+                    <li><i class="fa fa-road"></i>北京市昌平区</li>
+                    <li><i class="fa fa-phone"></i>博客：hr226</li>
+                    <li><i class="fa fa-envelope"></i>2108123704@qq.com</li>
+                </ul>
+            </div>
+            <div class="contact">
+                <h3>邮件联系</h3>
+                <div class="alert">信息发送成功！</div>
+                <form id="contactForm">
+                    <p>
+                        <label>姓名</label>
+                        <input type="text" name="name" id="name">
+                    </p>
+                    <p>
+                        <label>公司</label>
+                        <input type="text" name="company" id="company">
+                    </p>
+                    <p>
+                        <label>邮件</label>
+                        <input type="text" name="email" id="email">
+                    </p>
+                    <p>
+                        <label>电话</label>
+                        <input type="text" name="phone" id="phone">
+                    </p>
+                    <p class="full">
+                        <label>信息</label>
+                        <textarea name="message" rows="5" id="message"></textarea>
+                    </p>
+                    <p class="full">
+                        <button type="submit">提交</button>
+                    </p>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- 涉及到firebase，此处不详解，若有需要可联系博主QQ：2108123704 -->
+    <!-- <script src="https://www.gstatic.com/firebasejs/6.6.0/firebase-app.js"></script> -->
+    <script src="https://www.gstatic.com/firebasejs/5.10.1/firebase.js"></script>
+  <!--   <script src="main.js"></script> -->
+  <script>
+//初始化firebase对象
+  var firebaseConfig = {
+      apiKey: "AIzaSyCm3OWWSvoYR8cvtRrXdmOk7A78pGHe128",
+      authDomain: "contactform-63c92.firebaseapp.com",
+      databaseURL: "https://contactform-63c92.firebaseio.com",
+      projectId: "contactform-63c92",
+      storageBucket: "",
+      messagingSenderId: "318791736483",
+      appId: "1:318791736483:web:d038d5377f405e84c9f316"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+
+  // 创建一个collection
+  var messageRef = firebase.database().ref('message');
+
+  // 1-17行代码涉及到firebase，此处不详解，若有需要联系博主QQ：2108123704
+
+  // 添加submit事件
+  document.getElementById("contactForm").addEventListener("submit", submitForm);
+
+  function submitForm(e) {
+      e.preventDefault();
+      // console.log(123);
+
+      // 获取input中的值
+      var name = getInputVal('name');
+      var company = getInputVal('company');
+      var email = getInputVal('email');
+      var phone = getInputVal('phone');
+      var message = getInputVal('message');
+      // console.log(name);
+
+      // 存储数据
+      saveMessage(name, company, email, phone, message);
+
+      // 展示alert
+      document.querySelector('.alert').style.display = 'block';
+
+      // 2秒后消失alert
+      setTimeout(function() {
+          document.querySelector('.alert').style.display = 'none';
+      }, 2000);
+
+      // 清除表单
+      document.getElementById('contactForm').reset();
+  }
+
+  function getInputVal(id) {
+      return document.getElementById(id).value;
+  }
+
+  function saveMessage(name, company, email, phone, message) {
+      messageRef.push({
+          name: name,
+          company: company,
+          email: email,
+          phone: phone,
+          message: message
+      });
+  }
+  </script>
+</body>
+
+</html>

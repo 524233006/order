@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.project.hn.grade.mapper.HnGradeMapper">
+    
+    <resultMap type="HnGrade" id="HnGradeResult">
+        <result property="gradeId"    column="grade_id"    />
+        <result property="gradeName"    column="grade_name"    />
+        <result property="schoolId"    column="school_id"    />
+        <result property="status"    column="status"    />
+    </resultMap>
+
+    <sql id="selectHnGradeVo">
+        select grade_id, grade_name, school_id, status from hn_grade
+    </sql>
+
+    <select id="selectHnGradeList" parameterType="HnGrade" resultMap="HnGradeResult">
+        <include refid="selectHnGradeVo"/>
+        <where>  
+            <if test="gradeName != null  and gradeName != ''"> and grade_name like concat('%', #{gradeName}, '%')</if>
+            <if test="schoolId != null "> and school_id = #{schoolId}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectHnGradeById" parameterType="Long" resultMap="HnGradeResult">
+        <include refid="selectHnGradeVo"/>
+        where grade_id = #{gradeId}
+    </select>
+        
+    <insert id="insertHnGrade" parameterType="HnGrade">
+        insert into hn_grade
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="gradeId != null ">grade_id,</if>
+            <if test="gradeName != null  and gradeName != ''">grade_name,</if>
+            <if test="schoolId != null ">school_id,</if>
+            <if test="status != null  and status != ''">status,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="gradeId != null ">#{gradeId},</if>
+            <if test="gradeName != null  and gradeName != ''">#{gradeName},</if>
+            <if test="schoolId != null ">#{schoolId},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHnGrade" parameterType="HnGrade">
+        update hn_grade
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="gradeName != null  and gradeName != ''">grade_name = #{gradeName},</if>
+            <if test="schoolId != null ">school_id = #{schoolId},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+        </trim>
+        where grade_id = #{gradeId}
+    </update>
+
+    <delete id="deleteHnGradeById" parameterType="Long">
+        delete from hn_grade where grade_id = #{gradeId}
+    </delete>
+
+    <delete id="deleteHnGradeByIds" parameterType="String">
+        delete from hn_grade where grade_id in 
+        <foreach item="gradeId" collection="array" open="(" separator="," close=")">
+            #{gradeId}
+        </foreach>
+    </delete>
+    
+</mapper>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="utf-8">
+  <title>产品列表</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/weui2.css"/>
+<style id="__WXWORK_INNER_SCROLLBAR_CSS">::-webkit-scrollbar { width: 12px !important; height: 12px !important; }::-webkit-scrollbar-track:vertical {  }::-webkit-scrollbar-thumb:vertical { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-scrollbar-track:horizontal {  }::-webkit-scrollbar-thumb:horizontal { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-resizer { display: none !important; }</style></head>
+ <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<body ontouchstart="" style="background-color: #f8f8f8;">
+
+  <div class="weui_panel weui_panel_access">
+    
+    <div class="weui_panel_bd">
+      <div class="weui_cells_title">服务列表</div>
+      <!--
+      <a href="/sntx_bm/wap/item3.html" class="weui_media_box weui_media_appmsg">
+        <div class="weui_media_hd">
+          <img class="weui_media_appmsg_thumb" src="/static/sntx/03.jpg">
+        </div>
+        <div class="weui_media_bd">
+          <h4 class="weui_media_title">进步本</h4>
+          <p class="weui_media_desc">基于实考数据与智能分析归纳的知识点，将薄弱知识点和错题分类整理出来，方便随时翻阅复习</p>
+          <span class="weui-badge" style="margin-left: 5px;">已下架</span>
+        </div>
+      </a>
+      -->
+      
+      <!--
+      <a href="/sntx_bm/wap/item4.html" class="weui_media_box weui_media_appmsg">
+        <div class="weui_media_hd">
+          <img class="weui_media_appmsg_thumb" src="/static/sntx/04.jpg">
+        </div>
+        <div class="weui_media_bd">
+          <h4 class="weui_media_title">家校通信息服务</h4>
+          <p class="weui_media_desc">家校通是一个先进教育网络互动平台，同时也是学校与家长联系的桥梁和纽带，让老师、家长、学生能够更好的相互交流</p>
+        </div>
+      </a>
+      -->
+ 	
+      <a th:each="products,productStat : ${productList}" th:href="@{'/app/detail?id='+${products.id}}" class="weui_media_box weui_media_appmsg">
+        <div class="weui_media_hd">
+         <img class="weui_media_appmsg_thumb"  th:src="${products.hnProduct.url}" >
+        <!--   <img class="weui_media_appmsg_thumb" src="../static/img/365.png" th:src="@{/img/365.png}"> -->
+        </div>
+        <div class="weui_media_bd">
+          <h4 class="weui_media_title" th:text="${products.hnProduct.productName}"></h4>
+          <p class="weui_media_desc" th:text="${products.hnProduct.shortDesc}"></p>
+        </div>
+      </a>
+
+<!--
+      <a href="/sntx_bm/wap/item2.html" class="weui_media_box weui_media_appmsg">
+        <div class="weui_media_hd">
+          <img class="weui_media_appmsg_thumb" src="/static/sntx/02.jpg">
+        </div>
+        <div class="weui_media_bd">
+          <h4 class="weui_media_title">个性化成绩补救册(一人一本)</h4>
+          <p class="weui_media_desc">每个孩子做的“多分511”都是独一无二的，只为您的孩子量身打造</p>
+        </div>
+      </a>
+--> 
+
+      <!--
+      <a href="/sntx_bm/wap/item5.html" class="weui_media_box weui_media_appmsg">
+        <div class="weui_media_hd">
+          <img class="weui_media_appmsg_thumb" src="/static/sntx/05.jpg">
+        </div>
+        <div class="weui_media_bd">
+          <h4 class="weui_media_title">12倍疯狂礼包</h4>
+          <p class="weui_media_desc">新客户线上预订报名，缴费68元，获取12倍疯狂礼包</p>
+        </div>
+      </a>
+      -->
+    </div>
+  </div>
+
+  <div class="weui-loadmore weui-loadmore-line">
+    <span class="weui-loadmore-tips">请您打开链接进入支付页面</span>
+  </div>
+
+  <div class="weui_cells_title" style="height:45px;">&nbsp;</div>
+  <div class="tab-bottom">
+    <div class="weui_tabbar">
+      <a th:href="@{'/app/center?schoolProductId='+${schoolProductId}}" class="weui_tabbar_item weui_bar_item_on">
+        <div class="weui_tabbar_icon">
+          <img  alt="首页" src="../static/img/icon_nav_cell.png" th:src="@{/img/icon_nav_cell.png}">
+        </div>
+        <p class="weui_tabbar_label">首页</p>
+      </a>
+      <a  th:href="@{'/app/orderList'}" class="weui_tabbar_item">
+        <div class="weui_tabbar_icon">
+          <img  src="../static/img/icon_nav_button.png" th:src="@{/img/icon_nav_button.png}" alt="已购买">
+        </div>
+        <p class="weui_tabbar_label">已购买</p>
+      </a>
+      <a  th:href="@{'/app/my'}" class="weui_tabbar_item">
+        <div class="weui_tabbar_icon">
+          <img  alt="我" src="../static/img/icon_nav_panel.png" th:src="@{/img/icon_nav_panel.png}">
+        </div>
+        <p class="weui_tabbar_label">我</p>
+      </a>
+    </div>
+  </div>
+
+
+</body></html>

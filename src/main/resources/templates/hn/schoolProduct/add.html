@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增学校产品')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-schoolProduct-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">学校：</label>
+                <div class="col-sm-8">
+                    <select name="schoolId" class="form-control m-b">
+                        <option value="">-请选择-</option>
+                        <option th:each="school:${schools}" th:value="${school.id}" th:text="${school.schoolName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">产品：</label>
+                <div class="col-sm-8">
+                    <select name="productId" class="form-control m-b">
+                        <option value="">-请选择-</option>
+                        <option th:each="product:${products}" th:value="${product.id}" th:text="${product.productName}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">价格：</label>
+                <div class="col-sm-8">
+                    <input name="price" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">研学不填，学情分析填写 学年或者学期：</label>
+                <div class="col-sm-8">
+                    <input name="remarks" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_notice_status')}">
+                        <input type="radio" th:id="${'status_' + dict.dictCode}" name="status" th:value="${dict.dictValue}" th:checked="${dict.default}">
+                        <label th:for="${'status_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+           
+           
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "hn/schoolProduct"
+        $("#form-schoolProduct-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-schoolProduct-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

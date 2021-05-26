@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('新增班级')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-classes-add">
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">学校：</label>
+                <div class="col-sm-8">
+                    <select name="schoolId"  class="form-control m-b">
+                    	<option>请选择</option>
+                        <option th:each="school:${schools}" th:value="${school.id}" th:text="${school.schoolName}"></option>
+                    </select>
+                   
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">年级：</label>
+                <div class="col-sm-8">
+                    <select name="gradeId" class="form-control m-b" th:with="type=${@dict.getType('grade_level')}">
+                        <option th:each="dict : ${type}" th:text="${dict.dictLabel}" th:value="${dict.dictValue}"></option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">班级编号：</label>
+                <div class="col-sm-8">
+                    <input name="classCode" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">班级名称：</label>
+                <div class="col-sm-8">
+                    <input name="className" class="form-control" type="text">
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">状态：</label>
+                <div class="col-sm-8">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('sys_notice_status')}">
+                        <input type="radio" th:id="${'status_' + dict.dictCode}" name="status" th:value="${dict.dictValue}" th:checked="${dict.default}">
+                        <label th:for="${'status_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "hn/classes"
+        $("#form-classes-add").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/add", $('#form-classes-add').serialize());
+            }
+        }
+    </script>
+</body>
+</html>

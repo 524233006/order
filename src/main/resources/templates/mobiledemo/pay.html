@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="utf-8" />
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+<!-- <script type="text/javascript" src="http://res.wx.qq.com/open/js/jweixin-1.0.0.js"></script> -->
+
+<head>
+<script language="javascript">
+	alert($("#appId").val());
+			/*  wx.config({
+			    debug: true, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
+			    appId: '${appId}', // 必填，公众号的唯一标识
+			    timestamp:'${timeStamp}' , // 必填，生成签名的时间戳
+			    nonceStr: '${nonceStr}', // 必填，生成签名的随机串
+			    signature: '${signature}',// 必填，签名，见附录1
+			    jsApiList: ['chooseWXPay'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+			})  */
+$(function(){
+	/* var a = 1;
+		 function add(){
+			a++;
+			alert(a);
+			 $.ajax({
+        			type:"post",
+        	        url:"/pay/wx_return",
+        	        dataType:'json',
+        			data:{"orderId":'${orderId!}',"type":'${type!}'},
+        	        success:function(data){
+	           	        if(data.status == '1'){
+	           	        	window.location.href="http://mobile.yiduoyun.com/module/order.html";
+	           	        }
+        	        }
+        		});
+			} */
+		
+	/*   function callpay(){
+				WeixinJSBridge.invoke('getBrandWCPayRequest',{
+					"appId" : '${appId}',
+					"timeStamp" : '${timeStamp}',
+					"nonceStr" : '${nonceStr}',
+					"package" : 'prepay_id=${package}',
+					"signType" : '${signType}',
+					"paySign" : '${paySign}'
+			    },function(res){
+					if(res.err_msg == "get_brand_wcpay_request:ok"){  
+						add();
+		            }else if(res.err_msg == "get_brand_wcpay_request:cancel"){  
+		                alert("用户取消支付!");
+		            }else{
+		               alert("支付失败!");
+		            }  
+			    }
+			)
+		}  
+	 	 */
+	
+	 	 
+	 	
+})
+</script>
+
+</head>
+<body>
+<div>
+    <div>
+    	 <input name="appId" th:field="${appId}" class="form-control" type="text" id="appId"> 
+    	<ul>
+            <li><span class="red">应付金额：¥298元</span></li>
+        </ul>
+        
+       
+    </div>
+</div>
+
+
+<div class="red_submit"><a href="javascript:void(0);" onclick="callpay()">微信支付</a></div>
+<div style="text-align:center;">
+	<img style="margin-top:200px;" src="../img/loading-1.gif"/>
+</div>
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>购买须知</title>
+<link rel="stylesheet" href="../css/weui.css"/>
+ <link rel="stylesheet" href="../css/weui2.css"/>
+  <link rel="stylesheet" href="../css/esignDemo.css">
+   <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+  <script src="../static/js/esign.js"  th:src="@{/js/esign.js}"></script>
+  <style id="__WXWORK_INNER_SCROLLBAR_CSS">::-webkit-scrollbar { width: 12px !important; height: 12px !important; }::-webkit-scrollbar-track:vertical {  }::-webkit-scrollbar-thumb:vertical { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-scrollbar-track:horizontal {  }::-webkit-scrollbar-thumb:horizontal { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-resizer { display: none !important; }</style>
+</head>
+<body ontouchstart="" style="background-color: rgb(248, 248, 248);">
+
+  <div class="page-hd" th:if="${hnSchoolProduct.remarks!=null&&hnSchoolProduct.remarks!=''}">
+    <h1 class="page-hd-title">
+    	  购买须知
+    </h1>
+        <p class="page-hd-desc">您将购买的服务是由长沙盛宁通讯科技有限公司提供的富哲学情分析服务，该服务以自愿购买为原则的有偿服务，您需要仔细阅读购买须知后签字并提交，您签字提交后视为您自愿购买长沙盛宁通讯科技有限公司提供的有偿服务，购买行为与其他第三方无任何关系。</p>
+    <p class="page-hd-desc">本公司承诺所提供题型为全国五年内最新的真题，同时本公司对于提供服务的产品价格以及服务内容拥有最终解释权。</p>
+    <p class="page-hd-desc">如您在购买过程有任何疑问请拔打客服热线：400-049-7988&nbsp; 咨询产品订购说明情况。</p>
+    <p class="page-hd-desc">特别提醒：文化基础较差学生，专注课堂学习即可，不主张购买。</p>
+  </div>
+
+  <div class="page-hd">
+    <p>家长签名(可以横屏操作)</p>
+    <div class="canvasDiv">
+      <div id="editing_area">
+        <canvas width="600" height="250" id="canvasEdit"></canvas>
+      </div>
+    </div>
+
+    <div class="imgDiv">
+      <span id="sign_show"></span>
+    </div>
+
+    <div class="btnDiv weui_btn_area weui_btn_area_inline">
+      <a id="sign_clear" class="clearBtn weui_btn weui_btn_primary">清除</a>
+      <a id="sign_ok" class="okBtn weui_btn weui_btn_primary">确认</a>
+    </div>
+
+    <script type="text/javascript">
+      $(function(){
+       $().esign("canvasEdit", "sign_show", "sign_clear", "sign_ok");
+     });
+   </script>
+
+   <div class="weui_btn_area">
+    <button onclick="upload()" class="weui_btn weui_btn_primary">确认上传</button>
+    <a href="javascript:history.go(-1);" class="weui_btn weui_btn_default">返回</a>
+  </div>
+
+</div>
+
+<script type="text/javascript">
+  function upload()
+  {
+    var img = $('#sign_show').find("img").attr("src");
+
+    if ( img ) {
+
+      $.ajax({
+        type: "POST",
+        url: "",
+        data: { 
+          img: img ,
+          sign: 18662,
+        },
+        success: function(res) {
+          console.log(res)
+         // location.href="/sntx_bm/wap/pay/id/18662.html";
+        },
+        error: function() {
+          alert('签名失败，请再试一次')
+        }
+      })
+
+    } else {
+      alert('请先确认签字')
+    }
+
+  }
+</script>
+
+</body></html>

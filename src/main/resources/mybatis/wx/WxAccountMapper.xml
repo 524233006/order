@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.project.wx.account.mapper.WxAccountMapper">
+    
+    <resultMap type="WxAccount" id="WxAccountResult">
+        <result property="id"    column="id"    />
+        <result property="openId"    column="open_id"    />
+        <result property="headImgUrl"    column="head_img_url"    />
+        <result property="nickname"    column="nickname"    />
+        <result property="sexdesc"    column="sexDesc"    />
+        <result property="province"    column="province"    />
+        <result property="city"    column="city"    />
+        <result property="country"    column="country"    />
+        <result property="sex"    column="sex"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="unionId"    column="union_id"    />
+        <result property="stuId"    column="stu_id"    />
+    </resultMap>
+
+    <sql id="selectWxAccountVo">
+        select id, open_id, head_img_url, nickname, sexDesc, province, city, country, sex, status, create_by, create_time, update_by, update_time, union_id, stu_id from wx_account
+    </sql>
+
+    <select id="selectWxAccountList" parameterType="WxAccount" resultMap="WxAccountResult">
+        <include refid="selectWxAccountVo"/>
+        <where>  
+            <if test="openId != null  and openId != ''"> and open_id = #{openId}</if>
+            <if test="nickname != null  and nickname != ''"> and nickname like concat('%', #{nickname}, '%')</if>
+            <if test="sexdesc != null  and sexdesc != ''"> and sexDesc = #{sexdesc}</if>
+            <if test="province != null  and province != ''"> and province = #{province}</if>
+            <if test="city != null  and city != ''"> and city = #{city}</if>
+            <if test="sex != null  and sex != ''"> and sex = #{sex}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="unionId != null  and unionId != ''"> and union_id = #{unionId}</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+        </where>
+    </select>
+    
+    <select id="selectWxAccountById" parameterType="Long" resultMap="WxAccountResult">
+        <include refid="selectWxAccountVo"/>
+        where id = #{id}
+    </select>
+        
+         <select id="selectWxAccountByOpenId" parameterType="String" resultMap="WxAccountResult">
+        <include refid="selectWxAccountVo"/>
+        where open_id = #{openId}
+    </select>
+    <insert id="insertWxAccount" parameterType="WxAccount" useGeneratedKeys="true" keyProperty="id">
+        insert into wx_account
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="openId != null  and openId != ''">open_id,</if>
+            <if test="headImgUrl != null  and headImgUrl != ''">head_img_url,</if>
+            <if test="nickname != null  and nickname != ''">nickname,</if>
+            <if test="sexdesc != null  and sexdesc != ''">sexDesc,</if>
+            <if test="province != null  and province != ''">province,</if>
+            <if test="city != null  and city != ''">city,</if>
+            <if test="country != null  and country != ''">country,</if>
+            <if test="sex != null  and sex != ''">sex,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="unionId != null  and unionId != ''">union_id,</if>
+            <if test="stuId != null ">stu_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="openId != null  and openId != ''">#{openId},</if>
+            <if test="headImgUrl != null  and headImgUrl != ''">#{headImgUrl},</if>
+            <if test="nickname != null  and nickname != ''">#{nickname},</if>
+            <if test="sexdesc != null  and sexdesc != ''">#{sexdesc},</if>
+            <if test="province != null  and province != ''">#{province},</if>
+            <if test="city != null  and city != ''">#{city},</if>
+            <if test="country != null  and country != ''">#{country},</if>
+            <if test="sex != null  and sex != ''">#{sex},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="unionId != null  and unionId != ''">#{unionId},</if>
+            <if test="stuId != null ">#{stuId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWxAccount" parameterType="WxAccount">
+        update wx_account
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="openId != null  and openId != ''">open_id = #{openId},</if>
+            <if test="headImgUrl != null  and headImgUrl != ''">head_img_url = #{headImgUrl},</if>
+            <if test="nickname != null  and nickname != ''">nickname = #{nickname},</if>
+            <if test="sexdesc != null  and sexdesc != ''">sexDesc = #{sexdesc},</if>
+            <if test="province != null  and province != ''">province = #{province},</if>
+            <if test="city != null  and city != ''">city = #{city},</if>
+            <if test="country != null  and country != ''">country = #{country},</if>
+            <if test="sex != null  and sex != ''">sex = #{sex},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="unionId != null  and unionId != ''">union_id = #{unionId},</if>
+            <if test="stuId != null ">stu_id = #{stuId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWxAccountById" parameterType="Long">
+        delete from wx_account where id = #{id}
+    </delete>
+
+    <delete id="deleteWxAccountByIds" parameterType="String">
+        delete from wx_account where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

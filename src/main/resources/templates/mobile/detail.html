@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>产品详情</title>
+<link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/weui2.css"/>
+  <style id="__WXWORK_INNER_SCROLLBAR_CSS">
+  ::-webkit-scrollbar { width: 12px !important; height: 12px !important; }::-webkit-scrollbar-track:vertical {  }::-webkit-scrollbar-thumb:vertical { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-scrollbar-track:horizontal {  }::-webkit-scrollbar-thumb:horizontal { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-resizer { display: none !important; }</style>
+ <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+</head>
+ 
+ <body ontouchstart="" style="background-color: rgb(248, 248, 248);">
+ <div class="weui-weixin">
+  <div class="weui-weixin-ui"> 
+    <form method="post" th:action="@{'/app/canvas?id='+${hnSchoolProduct.id}}">
+      <div class="weui-weixin-page">
+       <h2 class="weui-weixin-title">[[${product.productName}]]</h2>
+       <div class="weui-weixin-info">
+        <span class="weui-weixin-em">产品介绍</span>
+         <a class="weui-weixin-a weui-weixin-nickname" href="">返回首页</a>
+       </div>
+
+       <div class="weui-weixin-img">
+        <!-- <img  src="../static/img/365.png" th:src="@{/img/365.png}" class="weixin"> -->
+   
+      </div>
+
+      <div class="weui-weixin-content">
+       <!--  <p>全套《知错365》包括4-5本的文件夹（语数外文综理综，涉及7-8科），以及平均超过300页的打印全套资料。</p>
+        <p>资料内容包括两部分，一部分是每次考试每个学科都出详细的个性化学情分析报告，对于孩子的答题情况、考试习惯以及丢分知识点进行最全面和最专业的诊断，便于学生加强自身了解，提升学习效率，真正做到提分减负；第二部分是所有学科的错题集，数理化三科的根据知识点配有举一反三练习题。</p>
+        <p>直接纸质版呈现，省去孩子抄录错题集的时间，且用精致文件夹按学科归类，便于孩子随时强化练习，查漏补缺。</p> -->
+
+       <!--  <div class="weui_cells_title weui-start">1. 学情分析报告服务</div> -->
+        <div class="weui-form">     
+
+         <!--  <div class="weui-form-li iblock">
+            <input class="weui-form-checkbox" name="f1" id="g1" value="88" type="radio" checked> 
+            <label for="g1">
+              <i class="weui-icon-radio"></i>
+              <div class="weui-form-text"><p>电子版(88元/主科)</p></div>
+            </label>
+          </div>  -->
+          <div >
+			<div id="content"></div>
+			<input type="hidden" id="article_content"  th:value="${product.descrption}">
+		  </div>
+
+          <div class="weui-form-li iblock" th:if="${hnSchoolProduct.remarks!=null&&hnSchoolProduct.remarks!=''}">
+            <input class="weui-form-checkbox" name="f1" id="g2" value="365" type="radio" checked=""> 
+            <label for="g2">
+              <i class="weui-icon-radio"></i>
+              <div class="weui-form-text"><p>纸质版(<i th:text="${hnSchoolProduct.price}"></i>元/<i th:text="${hnSchoolProduct.remarks}"></i>/全科)</p></div>
+            </label>
+          </div>
+          <div class="weui-form-li iblock" th:if="${hnSchoolProduct.remarks==null||hnSchoolProduct.remarks==''}">
+            <input class="weui-form-checkbox" name="f1" id="g2" value="365" type="radio" checked=""> 
+            <label for="g2">
+              <i class="weui-icon-radio"></i>
+              <div class="weui-form-text"><p>费用：<i th:text="${hnSchoolProduct.price}"></i>元<i th:text="${hnSchoolProduct.remarks}"></i></p></div>
+            </label>
+          </div>
+          
+        </div>
+
+        <div class="weui_btn_area">
+          <button type="submit" class="weui_btn weui_btn_primary">购买</button>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+</div>  
+
+<script type="text/javascript">
+$(function(){
+    var innerhtml = $("#article_content").val();
+    $("#content").html(innerhtml);
+});
+</script>
+</body></html>

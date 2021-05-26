@@ -1,0 +1,120 @@
+<!DOCTYPE html><html lang="zh-cmn-Hans"><head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>支付信息</title>
+<link rel="stylesheet" href="../css/weui.css"/>
+ <link rel="stylesheet" href="../css/weui2.css"/>
+<style id="__WXWORK_INNER_SCROLLBAR_CSS">::-webkit-scrollbar { width: 12px !important; height: 12px !important; }::-webkit-scrollbar-track:vertical {  }::-webkit-scrollbar-thumb:vertical { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-scrollbar-track:horizontal {  }::-webkit-scrollbar-thumb:horizontal { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-resizer { display: none !important; }</style></head>
+<body ontouchstart="" style="background-color: #f8f8f8;">
+  <div class="page-hd">
+    <h1 class="page-hd-title">
+      费用支付
+    </h1>
+    <!-- <p class="page-hd-desc">请确认支付信息</p> -->
+  </div>
+
+  <div class="weui-pay">
+  <input type="hidden" id="schoolProductId" th:value="${schoolProduct.id}">
+    <input type="hidden" id="timestamp" th:value="${timestamp}">
+    <h1 class="weui-payselect-title">费用</h1>
+    <p class="weui-pay-num">¥<i id="price" th:text="${schoolProduct.price}"></i></p>
+    <ul class="weui-pay-u">
+      <li>
+        <span class="title">学校</span>
+        <span class="content" id="schoolName" th:text="${hnSchool.schoolName}"></span>
+    <!--  <span class="content" id="schoolName" th:text="${schoolProduct.schoolName}"></span>  -->
+      </li>
+      <li>
+        <span class="title">年级</span>
+       <span class="content" th:text="${hnGrade.gradeName}"></span> 
+      </li>
+      <li>
+        <span class="title">班级</span>
+        <span class="content" id="className" th:text="${student.className}"></span> 
+      </li>
+      <!-- <li>
+        <span class="title">科目</span>
+        <span class="content"></span>
+      </li> -->
+      <li>
+        <span class="title">姓名</span>
+        <span class="content" id="stuName"  th:text="${student.stuName}"></span>
+      </li>      
+      <li>
+        <span class="title">联系方式</span>
+        <span class="content" id="tel" th:text="${student.tel}"></span>
+      </li>
+      <li>
+        <span class="title">家长签名</span>
+        <span class="content"></span>
+        
+      </li>
+    </ul>   
+    <img th:src="${student.url}">
+    <div class="pay-div">
+      <a onclick="callpay()" class="weui_btn weui_btn_primary">微信支付</a>
+      <a href="/sntx_bm/wap/index.html" class="weui_btn weui_btn_default">取消</a>
+    </div>
+  </div>
+  <div class="page__bd page__bd_spacing">
+    <br>
+    <div class="weui-footer">
+      <p class="weui-footer__text">Copyright © 2020 长沙盛宁通讯</p>
+    </div>
+  </div>
+ <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+ <script type="text/javascript" src="https://cdn.bootcss.com/blueimp-md5/2.10.0/js/md5.min.js"></script>
+  <script type="text/javascript">
+
+
+    function callpay()
+    {
+    	 var nonceStr = '';
+    	    var arr =  ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z'];
+    	    for(var i=0;i<32;i++) {
+    	      var index = Math.round(Math.random() * (arr.length-1));
+    	      nonceStr += arr[index];
+    	    }  
+    	   var  schoolProductId =$("#schoolProductId").val();
+    	    var appId     = 'wx9f5073e0b41cd9d9';
+    	    var timeStamp =$("#timestamp").val();
+    	    var key  = 'o5mkvgi30vdhjdcsvsizuk1i4owjboqd';
+    	     $.ajax({
+    	        url:"/api/prepay?schoolProductId="+schoolProductId,
+    	        type:"GET",
+    	        success:function(res){
+    	            if(res){
+    					var prepay_id=res.prepay_id;
+    					var paySign   = md5("appId=" + appId + "&nonceStr=" + nonceStr + "&package=prepay_id=" + prepay_id + "&signType=MD5" + "&timeStamp=" + timeStamp + "&key=" + key).toUpperCase();
+    					 WeixinJSBridge.invoke(
+    						      'getBrandWCPayRequest', {
+    						      "appId": appId, //公众号名称，由商户传入
+    						      "timeStamp":timeStamp, //时间戳，自1970年以来的秒数
+    						      "nonceStr": nonceStr, //随机串nonce_str
+    						      "package": "prepay_id=" + res.prepay_id,
+    						      "signType": "MD5", //微信签名方式：
+    						      "paySign": paySign
+    						      
+    						    },
+    						    
+    						    function (res) {
+    						      console.log("微信支付返回值:");
+    						      console.log(res);
+    						      if (res.err_msg == "get_brand_wcpay_request:ok") {
+    						        // 使用以上方式判断前端返回,微信团队郑重提示：
+    						        //res.err_msg将在用户支付成功后返回ok，但并不保证它绝对可靠。
+    						    	  location.href="/app/payok";
+    						      }
+    						     
+    						    });
+    	            }else{
+    	            	 alert("支付失败");
+    	            }
+    	        }
+
+    	    });    
+    }
+  </script>
+
+
+</body></html>

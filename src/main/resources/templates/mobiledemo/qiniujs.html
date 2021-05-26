@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>上传七牛</title>
+</head>
+<body>
+<script type="text/javascript">
+    var file;
+    //将图片转为base64格式
+    function imgSrcToBase64(img) {
+        r = new FileReader();  //本地预览
+        return r.readAsDataURL(img);    //Base64
+    }
+
+    function getFile(node) {
+        file = node.files[0]
+    }
+
+function putb64(){
+    var pic = imgSrcToBase64(file)
+    //设置上传域名，华东z0，华北z1，华南z2
+    var url = "http://upload-z2.qiniup.com/putb64/-1";
+    var token = "IsUiK1DPtt22Bj1Tw3_XVjMzD-dfxFo2JyK3S87B:6GL_nUOzb53p0m1ZXPaREHTlu6g=:eyJzY29wZSI6ImJ1Z3Rlc3QiLCJkZWFkbGluZSI6MTAwMTU2MTEwNjAyOX0=";
+    var xhr = new XMLHttpRequest();
+    var xhrget = new XMLHttpRequest();
+    var obj;
+    xhr.onreadystatechange=function(){
+        if (xhr.readyState==4){
+            document.getElementById("myDiv").innerHTML=xhr.responseText;
+        }
+    }
+
+    xhr.open("POST", url, true);
+    xhr.setRequestHeader("Content-Type", "application/octet-stream");
+    //设置上传token
+    xhr.setRequestHeader("Authorization", "UpToken " +token);
+    xhr.send(pic);
+}
+</script>
+<input id="input-file" class="upload" type="file" value="" onchange="getFile(this)">
+<br/>
+<span> </span>
+<br/>
+<button type="button" onclick="putb64()">发送</button>
+<div id="myDiv" >
+响应内容
+</div>
+<div width="600" height="600">
+</div>
+</body>
+</html>

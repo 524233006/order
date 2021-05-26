@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.project.wx.wxConfig.mapper.WxConfigMapper">
+    
+    <resultMap type="WxConfig" id="WxConfigResult">
+        <result property="id"    column="id"    />
+        <result property="name"    column="name"    />
+        <result property="startId"    column="start_id"    />
+        <result property="appid"    column="appid"    />
+        <result property="secret"    column="secret"    />
+        <result property="token"    column="token"    />
+        <result property="accesstoken"    column="accesstoken"    />
+        <result property="schoolId"    column="school_id"    />
+        <result property="schoolName"    column="school_name"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remarks"    column="remarks"    />
+    </resultMap>
+
+    <sql id="selectWxConfigVo">
+        select id, name, start_id, appid, secret, token, accesstoken, school_id, school_name, status, create_by, create_time, update_by, update_time, remarks from wx_config
+    </sql>
+
+    <select id="selectWxConfigList" parameterType="WxConfig" resultMap="WxConfigResult">
+        <include refid="selectWxConfigVo"/>
+        <where>  
+            <if test="name != null  and name != ''"> and name like concat('%', #{name}, '%')</if>
+            <if test="startId != null  and startId != ''"> and start_id = #{startId}</if>
+            <if test="appid != null  and appid != ''"> and appid = #{appid}</if>
+            <if test="schoolId != null "> and school_id = #{schoolId}</if>
+            <if test="schoolName != null  and schoolName != ''"> and school_name like concat('%', #{schoolName}, '%')</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="remarks != null  and remarks != ''"> and remarks = #{remarks}</if>
+        </where>
+    </select>
+    
+    <select id="selectWxConfigById" parameterType="Long" resultMap="WxConfigResult">
+        <include refid="selectWxConfigVo"/>
+        where id = #{id}
+    </select>
+        
+    <select id="selectWxConfigByAppId" parameterType="String" resultMap="WxConfigResult">
+        <include refid="selectWxConfigVo"/>
+        where appid = #{appid}
+    </select>
+    <insert id="insertWxConfig" parameterType="WxConfig" useGeneratedKeys="true" keyProperty="id">
+        insert into wx_config
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">name,</if>
+            <if test="startId != null  and startId != ''">start_id,</if>
+            <if test="appid != null  and appid != ''">appid,</if>
+            <if test="secret != null  and secret != ''">secret,</if>
+            <if test="token != null  and token != ''">token,</if>
+            <if test="accesstoken != null  and accesstoken != ''">accesstoken,</if>
+            <if test="schoolId != null ">school_id,</if>
+            <if test="schoolName != null  and schoolName != ''">school_name,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remarks != null  and remarks != ''">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="name != null  and name != ''">#{name},</if>
+            <if test="startId != null  and startId != ''">#{startId},</if>
+            <if test="appid != null  and appid != ''">#{appid},</if>
+            <if test="secret != null  and secret != ''">#{secret},</if>
+            <if test="token != null  and token != ''">#{token},</if>
+            <if test="accesstoken != null  and accesstoken != ''">#{accesstoken},</if>
+            <if test="schoolId != null ">#{schoolId},</if>
+            <if test="schoolName != null  and schoolName != ''">#{schoolName},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateWxConfig" parameterType="WxConfig">
+        update wx_config
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="name != null  and name != ''">name = #{name},</if>
+            <if test="startId != null  and startId != ''">start_id = #{startId},</if>
+            <if test="appid != null  and appid != ''">appid = #{appid},</if>
+            <if test="secret != null  and secret != ''">secret = #{secret},</if>
+            <if test="token != null  and token != ''">token = #{token},</if>
+            <if test="accesstoken != null  and accesstoken != ''">accesstoken = #{accesstoken},</if>
+            <if test="schoolId != null ">school_id = #{schoolId},</if>
+            <if test="schoolName != null  and schoolName != ''">school_name = #{schoolName},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remarks != null  and remarks != ''">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteWxConfigById" parameterType="Long">
+        delete from wx_config where id = #{id}
+    </delete>
+
+    <delete id="deleteWxConfigByIds" parameterType="String">
+        delete from wx_config where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

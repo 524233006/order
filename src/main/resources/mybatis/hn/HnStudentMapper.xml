@@ -1,0 +1,159 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.project.hn.student.mapper.HnStudentMapper">
+    
+    <resultMap type="HnStudent" id="HnStudentResult">
+        <result property="id"    column="id"    />
+        <result property="schoolId"    column="school_id"    />
+        <result property="classId"    column="class_id"    />
+        <result property="gradeId"    column="grade_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="gender"    column="gender"    />
+        <result property="tel"    column="tel"    />
+        <result property="url"    column="url"    />
+        <result property="status"    column="status"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="acountId"    column="acount_id"    />
+        <result property="openId"    column="open_id"    />
+        <result property="unionId"    column="union_id"    />
+        <result property="headImg"    column="head_img"    />
+        <result property="nickName"    column="nick_name"    />
+         <result property="cardId"    column="card_id"    />
+         <association property="hnSchool"    column="school_id" javaType="HnSchool" resultMap="hnSchoolResult" />
+         <association property="hnClasses"    column="class_id" javaType="HnClasses" resultMap="HnClassesResult" />
+    </resultMap>
+ 	<resultMap id="hnSchoolResult" type="HnSchool">
+		<id     property="id"   column="school_id"     />
+		<result property="schoolName" column="school_name"   />
+	</resultMap>
+	<resultMap id="HnClassesResult" type="hnClasses">
+		<id     property="id"   column="class_id"     />
+		<result property="classCode" column="class_code"   />
+	</resultMap>
+    <sql id="selectHnStudentVo">
+         select stu.id, stu.school_id, stu.class_id, stu.grade_id,stu.class_name,stu.stu_name, stu.gender, stu.tel, stu.url,stu.card_id, stu.status, stu.create_by, stu.create_time, stu.update_by, stu.update_time, stu.acount_id, stu.open_id, stu.union_id, stu.head_img, stu.nick_name, 
+         s.school_name
+         from hn_student stu
+            left join hn_school s on stu.school_id= s.id 
+           
+    </sql>
+
+    <select id="selectHnStudentList" parameterType="HnStudent" resultMap="HnStudentResult">
+         select stu.id, stu.school_id, stu.class_id, stu.grade_id,stu.class_name,stu.stu_name, stu.gender, stu.tel, stu.url, stu.status, stu.create_by, stu.create_time, stu.update_by, stu.update_time, stu.acount_id, stu.open_id, stu.union_id, stu.head_img, stu.nick_name, 
+         s.school_name
+         from hn_student stu
+            left join hn_school s on stu.school_id= s.id 
+            
+        <where>  
+            <if test="schoolId != null and schoolId !=''"> and stu.school_id = #{schoolId}</if>
+            <if test="gradeId != null and gradeId!=''"> and stu.grade_id = #{gradeId}</if>
+            <if test="classId != null and classId!=''"> and stu.class_id = #{classId}</if>
+            <if test="className != null and className!=''">and stu.class_name like concat('%', #{className}, '%')</if>
+            <if test="stuName != null  and stuName != ''"> and stu.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="gender != null  and gender != ''"> and stu.gender = #{gender}</if>
+            <if test="tel != null  and tel != ''"> and stu.tel = #{tel}</if>
+            <if test="acountId != null "> and stu.acount_id = #{acountId}</if>
+            <if test="nickName != null  and nickName != ''"> and stu.nick_name like concat('%', #{nickName}, '%')</if>
+            <if test="cardId != null  and cardId != ''"> and stu.card_id like concat('%', #{cardId}, '%')</if>
+        </where>
+    </select>
+    
+    <select id="selectHnStudentById" parameterType="Long" resultMap="HnStudentResult">
+        <include refid="selectHnStudentVo"/>
+        where stu.id = #{id}
+    </select>
+       
+    <select id="selectListByOpenId" parameterType="String" resultMap="HnStudentResult">
+        <include refid="selectHnStudentVo"/>
+        where stu.open_id = #{openId}
+    </select> 
+    <insert id="insertHnStudent" parameterType="HnStudent" useGeneratedKeys="true" keyProperty="id">
+        insert into hn_student
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="schoolId != null ">school_id,</if>
+            <if test="classId != null ">class_id,</if>
+            <if test="gradeId != null ">grade_id,</if>
+            <if test="className != null ">class_name,</if>
+            <if test="stuName != null  and stuName != ''">stu_name,</if>
+            <if test="gender != null  and gender != ''">gender,</if>
+            <if test="tel != null  and tel != ''">tel,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="acountId != null ">acount_id,</if>
+            <if test="openId != null  and openId != ''">open_id,</if>
+            <if test="unionId != null  and unionId != ''">union_id,</if>
+            <if test="headImg != null  and headImg != ''">head_img,</if>
+            <if test="nickName != null  and nickName != ''">nick_name,</if>
+             <if test="cardId != null ">card_id,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="schoolId != null ">#{schoolId},</if>
+            <if test="classId != null ">#{classId},</if>
+             <if test="gradeId != null ">#{gradeId},</if>
+             <if test="className != null ">#{className},</if>
+            <if test="stuName != null  and stuName != ''">#{stuName},</if>
+            <if test="gender != null  and gender != ''">#{gender},</if>
+            <if test="tel != null  and tel != ''">#{tel},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="acountId != null ">#{acountId},</if>
+            <if test="openId != null  and openId != ''">#{openId},</if>
+            <if test="unionId != null  and unionId != ''">#{unionId},</if>
+            <if test="headImg != null  and headImg != ''">#{headImg},</if>
+            <if test="nickName != null  and nickName != ''">#{nickName},</if>
+              <if test="cardId != null ">#{cardId},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHnStudent" parameterType="HnStudent">
+        update hn_student
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="schoolId != null ">school_id = #{schoolId},</if>
+            <if test="classId != null ">class_id = #{classId},</if>
+            <if test="gradeId != null ">grade_id= #{gradeId},</if>
+            <if test="className != null ">class_name= #{className},</if>
+            <if test="stuName != null  and stuName != ''">stu_name = #{stuName},</if>
+            <if test="gender != null  and gender != ''">gender = #{gender},</if>
+            <if test="tel != null  and tel != ''">tel = #{tel},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="acountId != null ">acount_id = #{acountId},</if>
+            <if test="openId != null  and openId != ''">open_id = #{openId},</if>
+            <if test="unionId != null  and unionId != ''">union_id = #{unionId},</if>
+            <if test="headImg != null  and headImg != ''">head_img = #{headImg},</if>
+            <if test="nickName != null  and nickName != ''">nick_name = #{nickName},</if>
+             <if test="cardId != null ">card_id = #{cardId},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHnStudentById" parameterType="Long">
+        delete from hn_student where id = #{id}
+    </delete>
+
+    <delete id="deleteHnStudentByIds" parameterType="String">
+        delete from hn_student where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

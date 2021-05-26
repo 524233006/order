@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>购买记录</title>
+<link rel="stylesheet" href="../css/weui.css"/>
+ <link rel="stylesheet" href="../css/weui2.css"/>
+</head>
+<body ontouchstart style="background-color: #f8f8f8;">
+
+  <div class="page-hd">
+    <h1 class="page-hd-title">
+      购买记录
+    </h1>
+    <!-- <p class="page-hd-desc"> <a href="">佳润研学</a> 的微信公众号， 请点击<a href="">这里关注</a>后获取新的活动通知</p> -->
+  </div>
+
+  <div class="page-bd">
+
+    <div class="weui-payrec">
+      <div class="weui_cells_title">我的购买记录</div>
+      <div class="weui_cells" th:each="order: ${studentOrderList}">
+       
+        <a class="weui_cell access" th:href="@{'/app/paydetail?id='+${order.id}}">
+          <div class="weui_cell_bd weui_cell_primary">
+            <h2 class="weui_cell_title"  th:text="${order.hnProduct.productName}"></h2>
+            <div class="weui_cell_info"></div>
+          </div>
+          <div class="weui_cell_ft">
+            <div class="weui_cell_title">支付成功</div>
+            <div class="weui_cell_info">￥<i th:text="${order.price}"></i>元</div>
+          </div>
+        </a>
+       
+      </div>
+    </div>
+  </div>
+
+  <div class="weui_cells_title" style="height:45px;">&nbsp;</div>
+	<div class="tab-bottom">
+    <div class="weui_tabbar">
+      <a th:href="@{'/app/center?schoolProductId='+${schoolProductId}}" class="weui_tabbar_item weui_bar_item_on">
+        <div class="weui_tabbar_icon">
+          <img  alt="首页" src="../static/img/icon_nav_cell.png" th:src="@{/img/icon_nav_cell.png}">
+        </div>
+        <p class="weui_tabbar_label">首页</p>
+      </a>
+      <a  th:href="@{'/app/orderList'}" class="weui_tabbar_item">
+        <div class="weui_tabbar_icon">
+          <img  src="../static/img/icon_nav_button.png" th:src="@{/img/icon_nav_button.png}" alt="已购买">
+        </div>
+        <p class="weui_tabbar_label">已购买</p>
+      </a>
+      <a  th:href="@{'/app/my'}" class="weui_tabbar_item">
+        <div class="weui_tabbar_icon">
+          <img  alt="我" src="../static/img/icon_nav_panel.png" th:src="@{/img/icon_nav_panel.png}">
+        </div>
+        <p class="weui_tabbar_label">我</p>
+      </a>
+    </div>
+  </div>
+
+</body>
+</html>

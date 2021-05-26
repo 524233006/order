@@ -1,0 +1,37 @@
+.canvasDiv
+{
+   height: 250px;
+   width: 600px;
+   border: 1px solid black;
+}
+
+.imgDiv
+{
+    height: 50px;
+    width: 80px;
+    border: 1px solid black;
+    margin-top: 15px;
+}
+
+.btnDiv
+{
+    /* height: 70px;
+    width: 300px; */
+    margin-top: 15px;
+}
+
+.clearBtn
+{
+    font-size: 16pt;
+    background:#e57727;
+    border: 0;
+    /* margin-left: 25%; */
+}
+
+.okBtn
+{
+    font-size: 16pt;
+    background: #36a5d9;
+    border: 0;
+    /* margin-left: 15%; */
+}

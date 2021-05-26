@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.project.hn.schoolProduct.mapper.HnSchoolProductMapper">
+    
+    <resultMap type="HnSchoolProduct" id="HnSchoolProductResult">
+        <result property="id"    column="id"    />
+        <result property="schoolId"    column="school_id"    />
+        <result property="productId"    column="product_id"    />
+        <result property="price"    column="price"    />
+        <result property="status"    column="status"    />
+        <result property="url"    column="url"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="remarks"    column="remarks"    />
+        <association property="hnSchool"    column="school_id" javaType="HnSchool" resultMap="hnSchoolResult" />
+         <association property="hnProduct"    column="product_id" javaType="HnProduct" resultMap="hnProductResult" />
+    </resultMap>
+	<resultMap id="hnSchoolResult" type="HnSchool">
+		<id     property="id"   column="school_id"     />
+		<result property="schoolName" column="school_name"   />
+	</resultMap>
+	<resultMap id="hnProductResult" type="HnProduct">
+		<id     property="id"   column="product_id"     />
+		<result property="productName" column="product_name"   />
+		<result property="url" column="product_url"   />
+		<result property="shortDesc" column="short_desc"   />
+	</resultMap>
+    <sql id="selectHnSchoolProductVo">
+       select sp.id,sp.school_id,sp.product_id,sp.price,sp.status,
+       sp.url ,s.school_name ,p.product_name ,p.short_desc ,p.url as product_url from hn_school_product sp 
+       left join hn_school s on sp.school_id= s.id 
+       left join hn_product p on sp.product_id = p.id
+    </sql>
+
+    <select id="selectHnSchoolProductList" parameterType="HnSchoolProduct" resultMap="HnSchoolProductResult">
+       select sp.id,sp.school_id,sp.product_id,sp.price,sp.status,
+       sp.url ,s.school_name ,p.product_name ,p.short_desc,p.url as product_url from hn_school_product sp 
+       left join hn_school s on sp.school_id= s.id 
+       left join hn_product p on sp.product_id = p.id
+        <where> 
+          <if test="id != null "> and sp.id = #{id}</if> 
+            <if test="schoolId != null "> and sp.school_id = #{schoolId}</if>
+            <if test="productId != null "> and sp.product_id = #{productId}</if>
+            <if test="price != null "> and sp.price = #{price}</if>
+            <if test="status != null  and status != ''"> and sp.status = #{status}</if>
+        </where>
+    </select>
+    
+    <select id="selectHnSchoolProductById" parameterType="Long" resultMap="HnSchoolProductResult">
+         select sp.id,sp.school_id,sp.product_id,sp.price,sp.status,sp.remarks,
+       sp.url ,s.school_name ,p.product_name from hn_school_product sp 
+       left join hn_school s on sp.school_id= s.id 
+       left join hn_product p on sp.product_id = p.id
+        where sp.id = #{id}
+    </select>
+        
+    <insert id="insertHnSchoolProduct" parameterType="HnSchoolProduct" useGeneratedKeys="true" keyProperty="id">
+        insert into hn_school_product
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="schoolId != null ">school_id,</if>
+            <if test="productId != null ">product_id,</if>
+            <if test="price != null ">price,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="url != null  and url != ''">url,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="remarks != null  and remarks != ''">remarks,</if>
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="schoolId != null ">#{schoolId},</if>
+            <if test="productId != null ">#{productId},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="url != null  and url != ''">#{url},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="remarks != null  and remarks != ''">#{remarks},</if>
+         </trim>
+    </insert>
+
+    <update id="updateHnSchoolProduct" parameterType="HnSchoolProduct">
+        update hn_school_product
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="schoolId != null ">school_id = #{schoolId},</if>
+            <if test="productId != null ">product_id = #{productId},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="url != null  and url != ''">url = #{url},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="remarks != null  and remarks != ''">remarks = #{remarks},</if>
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHnSchoolProductById" parameterType="Long">
+        delete from hn_school_product where id = #{id}
+    </delete>
+
+    <delete id="deleteHnSchoolProductByIds" parameterType="String">
+        delete from hn_school_product where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

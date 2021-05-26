@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title>填写学校信息</title>
+   <!--  <link rel="stylesheet" href="../css/weui.css"/> -->
+   <link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/weui2.css"/>
+<style id="__WXWORK_INNER_SCROLLBAR_CSS">::-webkit-scrollbar { width: 12px !important; height: 12px !important; }::-webkit-scrollbar-track:vertical {  }::-webkit-scrollbar-thumb:vertical { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-scrollbar-track:horizontal {  }::-webkit-scrollbar-thumb:horizontal { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-resizer { display: none !important; }</style></head>
+	
+<body ontouchstart="" style="background-color: #f8f8f8;">
+
+  <div class="page-hd">
+    <h1 class="page-hd-title">
+      学校信息
+    </h1>
+    <p class="page-hd-desc">请选择您孩子所在的学校和班级</p>
+  </div>
+
+  <form action="/app/info" id="loginForm" method="post">
+    <div class="page-bd">
+      <div class="weui_cells_title">学校信息</div>
+      <div class="weui_cells">
+        <div class="weui_cell weui_cell_select weui_select_after">
+          <div class="weui_cell_hd">
+            <label class="weui_label">学校</label>
+          </div>
+          <div class="weui_cell_bd weui_cell_primary">
+            <select class="weui_select" name="schoolId" id="schoolId"  onchange="addGrade(this.options[this.options.selectedIndex].value)">
+            <!--    {{# if(schoolProduct==null||schoolProduct==undefind||schoolProduct==""){ }}
+		   <option th:each="school:${schoollist}" th:value="${school.hnSchool.id}" th:text="${school.schoolName}"></option>
+		 {{#  }else{ }}
+		  {{#} }} -->
+		  <option  th:value="${schoolProduct.schoolId}" th:text="${schoolProduct.hnSchool.schoolName}"></option>
+             </select>
+          </div>
+        </div>
+      </div>
+
+      <div class="weui_cells_title">年级信息</div>
+      <div class="weui_cells">
+        <div class="weui_cell weui_cell_select weui_select_after">
+          <div class="weui_cell_hd">
+            <label class="weui_label">年级</label>
+          </div>
+          <div class="weui_cell_bd weui_cell_primary">
+           
+            <select class="weui_select"  required="" id="gradeId" name="gradeId" >
+			 <option >--请选择--</option>
+		</select>
+          </div>
+        </div>
+      </div>
+
+      <div class="weui_cells_title">班级信息</div>
+     <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+          <div class="weui_cell_hd">
+            <label class="weui_label">班级</label>
+          </div>
+          <div class="weui_cell_bd weui_cell_primary">
+            <input class="weui_input"  type="text" id="className" name="className" placeholder="班级名称"  required="" >
+        
+          </div>
+        </div>
+      </div>
+
+      <div class="weui_btn_area">
+        <button type="submit"  id="submitbut" class="weui_btn weui_btn_primary">下一步</button>
+      </div>
+    </div>
+  </form>
+
+  <br><br>
+
+  <div class="weui-footer weui-footer_fixed-bottom">
+    <p class="weui-footer__links">
+      技术支持： <a href="http://fuzhedu.com" class="weui-footer__link">富哲教育</a>
+    </p>
+    <p class="weui-footer__text">Copyright © 2020 长沙盛宁科技有限公司</p>
+  </div>
+  
+  <!-- <script src="../../js/jquery.min.js"></script> -->
+ <script src="../static/js/jquery.min.js" th:src="@{/js/jquery.min.js}"></script>
+  <script src="../static/js/zepto.min.js"  th:src="@{/js/zepto.min.js}"></script>
+ <!--  <script type="text/javascript">
+    $("#schoolId").change(function() {
+      var s = $("#schoolId").val();
+
+      $.ajax({
+        type: "POST",
+        url: "/sntx_bm/wap/school.html",
+        data: { s: s },
+        success: function(data) {
+          $("#grade").empty();
+          $("#grade").append(data);
+        },
+        error: function() {
+          alert('获取班级失败')
+        }
+      })
+
+    })
+  </script> -->
+<script type="text/javascript">
+$(function addGrade(v){
+	 var schoolId = $('#schoolId option:selected').val();
+	 //option 清除
+	 $("#gradeId").empty();
+	 $("#gradeId").append("<option selected value=''>---请选择---</option>");
+    $.ajax({
+        url:"/app/addGrade",
+        type:"POST",
+        data:{schoolId:schoolId},
+        success:function(res){
+            if(res.code==0){
+					for(var i = 0; i < res.data.length; i++) {
+						//添加option元素
+						$("#gradeId").append("<option value='" + res.data[i].gradeId + "'>" + res.data[i].gradeName + "</option>");
+					}
+               
+            }else{
+               
+            }
+        }
+
+    });   
+});     
+	
+
+     function addClass(v){
+    	 var schoolId = $('#schoolId option:selected').val();
+    	 //option 清除
+    	 $("#classId").empty();
+    	 $("#classId").append("<option selected value=''>---请选择---</option>");
+         $.ajax({
+             url:"/app/addClasses",
+             type:"POST",
+             data:{schoolId:schoolId,gradeId:v},
+             success:function(res){
+                 if(res.code==0){
+						for(var i = 0; i < res.data.length; i++) {
+							//添加option元素
+							$("#classId").append("<option value='" + res.data[i].id + "'>" + res.data[i].className + "</option>");
+						}
+                    
+                 }else{
+                    
+                 }
+             }
+
+         });   
+     }     
+
+     $("#submitbut").click(function(){
+    	 var schoolId = $('#schoolId option:selected').val();
+    	 var gradeId = $('#gradeId option:selected').val();
+    	 var className = $('#className').val();
+         if(schoolId == ""){
+        	alert("没有选择学校");
+             return false;
+         }
+         if(gradeId == ''){
+        	 alert("没有选择年级");
+             return false;
+         }
+         if(className == ""){
+        	 alert("没有选择班级");
+             return false;
+         }
+         $("#loginForm").submit();
+     });
+
+
+ 
+	</script>
+</body></html>

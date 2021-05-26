@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,user-scalable=0">
+  <title> 学生信息</title>
+   <link rel="stylesheet" href="../css/weui.css"/>
+    <link rel="stylesheet" href="../css/weui2.css"/>
+<style id="__WXWORK_INNER_SCROLLBAR_CSS">::-webkit-scrollbar { width: 12px !important; height: 12px !important; }::-webkit-scrollbar-track:vertical {  }::-webkit-scrollbar-thumb:vertical { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-scrollbar-track:horizontal {  }::-webkit-scrollbar-thumb:horizontal { background-color: rgba(136, 141, 152, 0.5) !important; border-radius: 10px !important; background-clip: content-box !important; border:2px solid transparent !important; } ::-webkit-resizer { display: none !important; }</style>
+<script th:src="@{/js/jquery.min.js}"></script>
+<script th:src="@{/js/bootstrap.min.js}"></script>
+<!-- jquery-validate 表单验证插件 -->
+<script th:src="@{/ajax/libs/validate/jquery.validate.min.js}"></script>
+<script th:src="@{/ajax/libs/validate/messages_zh.min.js}"></script>
+<script th:src="@{/ajax/libs/validate/jquery.validate.extend.js}"></script>
+</head>
+
+<body ontouchstart="" style="background-color: #f8f8f8;">
+  <div class="page-hd">
+    <h1 class="page-hd-title">
+      个人信息
+    </h1>
+    <p class="page-hd-desc">请家长填写孩子的个人信息</p>
+  </div>
+
+  <form action="/app/list" method="post" th:object="${student}" id="info">
+    <div class="page-bd">
+      <div class="weui_cells_title">个人信息</div>
+      <input type="hidden" name="schoolId" th:field="*{schoolId}">
+     <input type="hidden" name="gradeId" th:field="*{gradeId}">
+      <input type="hidden" name="className" th:field="*{className}">
+      <div class="weui_cells weui_cells_form">
+        <div class="weui_cell">
+          <div class="weui_cell_hd"><label class="weui_label">姓名</label></div>
+          <div class="weui_cell_bd weui_cell_primary">
+            <input class="weui_input" name="stuName" type="text" placeholder="学生姓名" required="">
+          </div>
+        </div>
+ 
+		<div class="weui_cell"  th:if="${schoolProductId} eq '11'">
+          <div class="weui_cell_hd"><label class="weui_label">身份证号码</label></div>
+          <div class="weui_cell_bd weui_cell_primary">
+            <input class="weui_input" name="cardId" type="text" placeholder="学生身份证号码" required="">
+          </div>
+        </div>
+      
+        <!--
+        <div class="weui_cell">
+          <div class="weui_cell_hd"><label class="weui_label">性别</label></div>
+          <div class="weui_cell_bd weui_cell_primary">
+            <div class="iblock">
+              <input class="weui-form-checkbox" name="sex" id="s1" value="男" type="radio" checked> 
+              <label for="s1">
+                <i class="weui-icon-radio"></i>
+                <div class="weui-form-text"><p>男</p></div>
+              </label>
+            </div>
+            <div class="iblock">
+              <input class="weui-form-checkbox" name="sex" id="s2" value="女" type="radio"> 
+              <label for="s2">
+                <i class="weui-icon-radio"></i>
+                <div class="weui-form-text"><p>女</p></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <div class="weui_cell">
+          <div class="weui_cell_hd"><label class="weui_label">年龄</label></div>
+          <div class="weui_cell_bd weui_cell_primary">
+            <input class="weui_input" name="age" type="number" placeholder="学生年龄" required>
+          </div>
+        </div>
+        -->
+
+        <div class="weui_cell">
+          <div class="weui_cell_hd"><label class="weui_label">联系电话</label></div>
+          <div class="weui_cell_bd weui_cell_primary">
+            <input class="weui_input" id="tel" name="tel" type="number" placeholder="家长的手机号"   required >
+         
+          </div>
+        </div>
+        
+      </div>
+
+      <div class="weui_cells_tips">请填写以上信息后点击提交</div>
+
+      <div class="weui_btn_area">
+       <!--  <input type="hidden" name="age" value="0">
+        <input type="hidden" name="sex" value="无"> -->
+        <button type="submit" class="weui_btn weui_btn_primary">提交</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="page__bd page__bd_spacing">
+    <br>
+    <div class="weui-footer">
+      <p class="weui-footer__text">Copyright © 2020 长沙盛宁科技有限公司</p>
+    </div>
+  </div>
+  
+
+        
+<script>
+	/* function validateTel(){//校验电话
+		 var tel = document.getElementById('tel').value;
+	
+		  if(tel!=""){
+		    var strRegex = /^(13|14|15|17|18)\d{9}$/;
+		    if(!strRegex.test(tel)){
+		    	 alert("手机号码有误，请重填");  
+		      return false;
+		    }
+		  }
+		  return true;
+		} */
+		
+		
+        $("#info").validate({
+        	onkeyup: false,
+        	rules:{
+        		tel:{
+        			isPhone:true,
+        			minlength: 11,
+        			required: true,
+        		},
+        	},
+        	messages: {
+                "tel": {
+                    remote: "手机号码输入不正确"
+                }
+        		
+            },
+            focusCleanup: true
+        });
+        
+        function submitHandler() {
+	        if ($.validate.form()) {
+	        	var data = $("#info").serializeArray();
+	        	
+	        	$.operate.saveTab(  "/app/list", data);
+	        }
+	    }
+         
+    
+		
+
+	
+		
+    </script>
+</body></html>

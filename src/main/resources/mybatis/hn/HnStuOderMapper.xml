@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.numberone.project.hn.oder.mapper.HnStuOderMapper">
+    
+    <resultMap type="HnStuOder" id="HnStuOderResult"> 
+        <result property="id"    column="id"    />
+        <result property="scoolId"    column="scool_id"    />
+        <result property="schoolName"    column="school_name"    />
+        <result property="classId"    column="class_id"    />
+        <result property="className"    column="class_name"    />
+        <result property="productName"    column="product_name"    />
+        <result property="gradeName"    column="grade_name"    />
+        <result property="tel"    column="tel"    />
+        <result property="stuId"    column="stu_id"    />
+        <result property="stuName"    column="stu_name"    />
+        <result property="price"    column="price"    />
+        <result property="status"    column="status"    />
+         <result property="state"    column="state"    />
+          <result property="refundMoney"    column="refund_money"    />
+        <result property="createBy"    column="create_by"    />
+        <result property="createTime"    column="create_time"    />
+        <result property="refundTime"    column="refund_time"    />
+        <result property="updateBy"    column="update_by"    />
+        <result property="updateTime"    column="update_time"    />
+        <result property="updateDay"    column="update_day"    />
+        <result property="updateMonth"    column="update_month"    />
+        <result property="schoolProductId"    column="school_product_id"/>
+        <result property="accountId"    column="account_id"    />
+         <result property="orderCode"    column="order_code"    />
+          <result property="gradeId"    column="grade_id"    />
+           <result property="totalMoney"    column="total_money"    />
+            <result property="num"    column="num"    />
+              <result property="startTime"    column="update_time"    />
+               <result property="endTime"    column="update_time"    />
+               
+         <association property="hnSchoolProduct"    column="school_product_id" javaType="HnSchoolProduct" resultMap="hnSchoolProduct" />
+          <association property="hnProduct"    column="product_id" javaType="HnProduct" resultMap="hnProductResult" />
+     <association property="hnSchool"    column="school_id" javaType="HnSchool" resultMap="hnSchoolResult" />
+     <association property="hnStudent"    column="stu_id" javaType="HnStudent" resultMap="HnStudentResult" />
+     <association property="hnGrade"    column="grade_id" javaType="HnGrade" resultMap="HnGradeResult" />
+    </resultMap>
+    <resultMap id="hnSchoolResult" type="HnSchool">
+		<id     property="id"   column="scool_id"     />
+		<result property="schoolName" column="school_name"   />
+	</resultMap>
+	<resultMap id="hnSchoolProduct" type="HnSchoolProduct">
+		<id     property="id"   column="school_product_id"     />
+		<result property="productId" column="product_id"   />
+	</resultMap>
+	<resultMap id="hnProductResult" type="HnProduct">
+		<id     property="id"   column="product_id"     />
+		<result property="productName" column="product_name"   />
+		<result property="shortDesc" column="short_desc"   />
+	</resultMap>
+	<resultMap id="HnStudentResult" type="HnStudent">
+		<id     property="id"   column="stu_id"     />
+		<result property="tel" column="tel"   />
+	</resultMap>
+	<resultMap id="HnGradeResult" type="HnGrade">
+		<id     property="gradeId"   column="grade_id"     />
+		<result property="gradeName" column="grade_name"   />
+	</resultMap>
+    <sql id="selectHnStuOderVo">
+           select o.id, o.scool_id, o.class_id,o.grade_id, o.order_code,o.stu_id, o.stu_name, o.price, o.status, o.state,o.refund_money,o.refund_time,o.create_by, o.create_time, o.update_by, o.update_time, o.school_product_id, o.account_id ,sp.product_id ,p.product_name as  product_name,s.school_name as school_name from hn_stu_oder o 
+        left join hn_school_product sp on o.school_product_id=sp.id left join hn_product p on sp.product_id = p.id left join hn_school s on s.id = o.scool_id 
+    </sql>
+
+    <select id="selectHnStuOderList" parameterType="HnStuOder" resultMap="HnStuOderResult">
+       
+         select DATE_FORMAT(o.update_time,'%Y-%m-%d') as update_day,DATE_FORMAT(o.update_time,'%Y-%m') as update_month,o.id, o.scool_id, o.class_id,o.grade_id, o.state,o.refund_money,o.refund_time,o.order_code,o.stu_id, o.stu_name, o.price, o.status, o.create_by, o.create_time, o.update_by, o.update_time, o.school_product_id, o.account_id ,sp.product_id ,p.product_name ,s.school_name ,g.grade_name ,st.tel,st.class_name from hn_stu_oder o 
+        left join hn_school_product sp on o.school_product_id=sp.id left join hn_product p on sp.product_id = p.id left join hn_school s on s.id = o.scool_id left join hn_grade g on g.grade_id =o.grade_id  left join hn_student  st on st.id=o.stu_id
+        <where>  
+            <if test="scoolId != null "> and o.scool_id = #{scoolId}</if>
+            <if test="classId != null "> and o.class_id = #{classId}</if>
+            <if test="gradeId != null "> and  o.grade_id = #{gradeId}</if>
+            <if test="stuId != null "> and o.stu_id = #{stuId}</if>
+            <if test="orderCode != null and orderCode != ''"> and o.order_code = #{orderCode}</if>
+            <if test="stuName != null  and stuName != ''"> and o.stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="price != null "> and o.price = #{price}</if>
+            <if test="status != null  and status != ''"> and o.status = #{status}</if>
+            <if test="state != null  and state != ''"> and o.state = #{state}</if>
+            <if test="schoolProductId != null "> and o.school_product_id = #{schoolProductId}</if>
+            <if test="hnGrade!=null and hnGrade.gradeName != null and hnGrade.gradeName != '' "> and g.grade_name like concat('%', #{hnGrade.gradeName}, '%')</if>
+            <if test="hnProduct!=null and hnProduct.productName != null and hnProduct.productName != '' "> and p.product_name like concat('%', #{hnProduct.productName}, '%')</if>
+             <if test="hnStudent!=null and hnStudent.className != null and hnStudent.className != '' "> and st.class_name like concat('%', #{hnStudent.className}, '%')</if>
+      		<if test="hnStudent!=null and hnStudent.tel != null and hnStudent.tel != '' "> and st.tel like concat('%', #{hnStudent.tel}, '%')</if>
+      		<if test="updateDay != null  and updateDay != ''"> and DATE_FORMAT(o.update_time,'%Y-%m-%d') = #{updateDay}</if>
+      		<if test="updateMonth != null  and updateMonth != ''"> and DATE_FORMAT(o.update_time,'%Y-%m') = #{updateMonth}</if>
+      	 <if test="startTime != null  and startTime != ''">
+      		 <![CDATA[   and DATE_FORMAT(o.update_time,'%Y-%m-%d')>=  DATE_FORMAT(#{startTime}, '%Y-%m-%d')   ]]>
+       	 </if>
+		<if test="endTime!=null and endTime!=''">
+		    <![CDATA[  and DATE_FORMAT(o.update_time,'%Y-%m-%d') <= DATE_FORMAT(#{endTime}, '%Y-%m-%d')    ]]>
+		</if>
+        </where>
+        
+    </select>
+    
+    <select id="selectHnStuOderById" parameterType="Long" resultMap="HnStuOderResult">
+        select o.id, o.scool_id, o.class_id, o.order_code,o.stu_id, o.stu_name, o.price, o.status, o.state,o.refund_money,o.create_by, o.create_time, o.update_by, o.update_time, o.school_product_id, o.account_id ,sp.product_id ,p.product_name from hn_stu_oder o 
+        left join hn_school_product sp on o.school_product_id=sp.id left join hn_product p on sp.product_id = p.id
+        where o.id = #{id}
+    </select>
+     
+      <select id="selectHnStudentId" parameterType="Long" resultMap="HnStuOderResult">
+        <include refid="selectHnStuOderVo"/>
+        where o.stu_id = #{id} and o.status='1'  order by o.update_time desc limit 1
+    </select>
+      <select id="selectHnStuOderByOrderCode" parameterType="String" resultMap="HnStuOderResult">
+        <include refid="selectHnStuOderVo"/>
+        where o.order_code = #{orderCode} limit 1
+    </select>
+     <select id="countByHnStuOder" parameterType="HnStuOder" resultMap="HnStuOderResult">
+       
+        select count(id) as num,sum(price) as total_money  from hn_stu_oder  
+         <where>  
+            <if test="scoolId != null "> and scool_id = #{scoolId}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="gradeId != null "> and grade_id = #{gradeId}</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="schoolProductId != null "> and school_product_id = #{schoolProductId}</if>
+        </where>
+       
+    </select> 
+    
+     <select id="countByToday"  resultMap="HnStuOderResult">
+       
+       select count(id) as num , sum(price) as total_money from hn_stu_oder where date(create_time) = curdate() and status =1
+    </select> 
+    <select id="countByMonth" parameterType="HnStuOder" resultMap="HnStuOderResult">
+       
+        select count(id) as num,sum(price) as total_money ,Month(create_time) from hn_stu_oder  
+         <where>  
+            <if test="scoolId != null "> and scool_id = #{scoolId}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="gradeId != null "> and grade_id = #{gradeId}</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="schoolProductId != null "> and school_product_id = #{schoolProductId}</if>
+        </where>
+        group by Month(create_time)
+    </select> 
+     <select id="countByDay" parameterType="HnStuOder" resultMap="HnStuOderResult">
+       
+         select count(id) as num,sum(price) as total_money ,Date(DATE_FORMAT(update_time,'%Y-%m-%d')) AS UPDATE_TIME from hn_stu_oder 
+         <where>  
+            <if test="scoolId != null "> and scool_id = #{scoolId}</if>
+            <if test="classId != null "> and class_id = #{classId}</if>
+            <if test="gradeId != null "> and grade_id = #{gradeId}</if>
+            <if test="stuId != null "> and stu_id = #{stuId}</if>
+            <if test="stuName != null  and stuName != ''"> and stu_name like concat('%', #{stuName}, '%')</if>
+            <if test="price != null "> and price = #{price}</if>
+            <if test="status != null  and status != ''"> and status = #{status}</if>
+            <if test="schoolProductId != null "> and school_product_id = #{schoolProductId}</if>
+        </where>
+      group by DATE(DATE_FORMAT(update_time,'%Y-%m-%d')) ORDER BY  update_time   limit 30
+
+    </select>     
+    <insert id="insertHnStuOder" parameterType="HnStuOder" useGeneratedKeys="true" keyProperty="id">
+        insert into hn_stu_oder
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="scoolId != null ">scool_id,</if>
+            <if test="classId != null ">class_id,</if>
+             <if test="gradeId != null ">grade_id,</if>
+            <if test="stuId != null ">stu_id,</if>
+            <if test="stuName != null  and stuName != ''">stu_name,</if>
+            <if test="price != null ">price,</if>
+            <if test="status != null  and status != ''">status,</if>
+            <if test="createBy != null  and createBy != ''">create_by,</if>
+            <if test="createTime != null ">create_time,</if>
+            <if test="updateBy != null  and updateBy != ''">update_by,</if>
+            <if test="updateTime != null ">update_time,</if>
+            <if test="schoolProductId != null ">school_product_id,</if>
+            <if test="accountId != null ">account_id,</if>
+            <if test="orderCode != null ">order_code,</if>
+           
+         </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="scoolId != null ">#{scoolId},</if>
+            <if test="classId != null ">#{classId},</if>
+            <if test="gradeId != null ">#{gradeId},</if>
+            <if test="stuId != null ">#{stuId},</if>
+            <if test="stuName != null  and stuName != ''">#{stuName},</if>
+            <if test="price != null ">#{price},</if>
+            <if test="status != null  and status != ''">#{status},</if>
+            <if test="createBy != null  and createBy != ''">#{createBy},</if>
+            <if test="createTime != null ">#{createTime},</if>
+            <if test="updateBy != null  and updateBy != ''">#{updateBy},</if>
+            <if test="updateTime != null ">#{updateTime},</if>
+            <if test="schoolProductId != null ">#{schoolProductId},</if>
+            <if test="accountId != null ">#{accountId},</if>
+             <if test="orderCode != null ">#{orderCode},</if>
+            
+         </trim>
+    </insert>
+
+    <update id="updateHnStuOder" parameterType="HnStuOder">
+        update hn_stu_oder
+        <trim prefix="SET" suffixOverrides=",">
+            <if test="scoolId != null ">scool_id = #{scoolId},</if>
+            <if test="classId != null ">class_id = #{classId},</if>
+            <if test="gradeId != null ">grade_id = #{gradeId},</if>
+            <if test="stuId != null ">stu_id = #{stuId},</if>
+            <if test="stuName != null  and stuName != ''">stu_name = #{stuName},</if>
+            <if test="price != null ">price = #{price},</if>
+            <if test="status != null  and status != ''">status = #{status},</if>
+            <if test="state != null  and state != ''">state = #{state},</if>
+            <if test="refundMoney != null  and refundMoney != ''">refund_money = #{refundMoney},</if>
+            <if test="createBy != null  and createBy != ''">create_by = #{createBy},</if>
+            <if test="createTime != null ">create_time = #{createTime},</if>
+             <if test="refundTime != null ">refund_time = #{refundTime},</if>
+            <if test="refundTime != null ">refund_time = #{refundTime},</if>
+            <if test="updateBy != null  and updateBy != ''">update_by = #{updateBy},</if>
+            <if test="updateTime != null ">update_time = #{updateTime},</if>
+            <if test="schoolProductId != null ">school_product_id = #{schoolProductId},</if>
+            <if test="accountId != null ">account_id = #{accountId},</if>
+            <if test="orderCode != null ">order_code = #{orderCode},</if>
+            
+        </trim>
+        where id = #{id}
+    </update>
+
+    <delete id="deleteHnStuOderById" parameterType="Long">
+        delete from hn_stu_oder where id = #{id}
+    </delete>
+
+    <delete id="deleteHnStuOderByIds" parameterType="String">
+        delete from hn_stu_oder where id in 
+        <foreach item="id" collection="array" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </delete>
+    
+</mapper>

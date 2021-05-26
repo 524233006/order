@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="zh" xmlns:th="http://www.thymeleaf.org" >
+<head>
+    <th:block th:include="include :: header('修改订单')" />
+</head>
+<body class="white-bg">
+    <div class="wrapper wrapper-content animated fadeInRight ibox-content">
+        <form class="form-horizontal m" id="form-oder-edit" th:object="${hnStuOder}">
+            <input name="id" th:field="*{id}" type="hidden">
+          
+                        <div class="form-group">    
+                <label class="col-sm-3 control-label">姓名：</label>
+                <div class="col-sm-8">
+                    <input name="stuName" th:field="*{stuName}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">价格：</label>
+                <div class="col-sm-8">
+                    <input name="price" th:field="*{price}" class="form-control" type="text" readonly>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否付款：</label>
+                <div class="col-sm-3">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('order_status')}">
+                        <input type="radio" th:id="${'status_' + dict.dictCode}" name="status" th:value="${dict.dictValue}" th:field="*{status}">
+                        <label th:for="${'status_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+               
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">是否退款：</label>
+                <div class="col-sm-3">
+                    <div class="radio-box" th:each="dict : ${@dict.getType('state')}">
+                        <input type="radio" th:id="${'state_' + dict.dictCode}" name="state" th:value="${dict.dictValue}" th:field="*{state}">
+                        <label th:for="${'state_' + dict.dictCode}" th:text="${dict.dictLabel}"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group">    
+                <label class="col-sm-3 control-label">退款金额：</label>
+                <div class="col-sm-8">
+                    <input name="refundMoney" th:field="*{refundMoney}" class="form-control" type="text">
+                </div>
+            </div>
+        </form>
+    </div>
+    <th:block th:include="include :: footer" />
+    <script type="text/javascript">
+        var prefix = ctx + "hn/oder";
+        $("#form-oder-edit").validate({
+            focusCleanup: true
+        });
+
+        function submitHandler() {
+            if ($.validate.form()) {
+                $.operate.save(prefix + "/edit", $('#form-oder-edit').serialize());
+            }
+        }
+    </script>
+</body>
+</html>
