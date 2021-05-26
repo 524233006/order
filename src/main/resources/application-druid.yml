@@ -6,10 +6,7 @@ spring:
         druid:
             # 主库数据源   show Variables like '%table_names'
             master:
-            #内网地址  rm-wz90zj61ro6ii0l21125010.mysql.rds.aliyuncs.com rm-wz90zj61ro6ii0l21ko.mysql.rds.aliyuncs.com
-                url: jdbc:mysql://rm-wz90zj61ro6ii0l21ko.mysql.rds.aliyuncs.com:3306/order1?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
-                username: order1
-                password: 71fdc02a48
+          
                 #url: jdbc:mysql://localhost:3306/order?useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull&useSSL=true&serverTimezone=GMT%2B8
                 #username: root
                 #password: root
